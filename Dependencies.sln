@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkTech.Loader", "SparkTech.Loader\SparkTech.Loader.csproj", "{D2BE0DA3-9047-44DF-A838-C8420DD7475B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32CC65E1-4E08-422B-9AE0-8BF9A1460925}"
+	ProjectSection(SolutionItems) = preProject
+		Download\SparkTech.Loader.txt = Download\SparkTech.Loader.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
