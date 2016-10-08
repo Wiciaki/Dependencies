@@ -5,7 +5,10 @@
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
+    using System.Linq;
     using System.Net;
+    using System.Runtime.InteropServices;
+    using System.Threading;
 
     using Microsoft.Win32;
 
@@ -15,6 +18,13 @@
     [SuppressMessage("ReSharper", "LocalizableElement")]
     internal static class Program
     {
+        /// <summary>
+        /// Allocates a console to the current thread
+        /// </summary>
+        /// <returns></returns>
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool AllocConsole();
+
         /// <summary>
         /// Holds data for a specified resource
         /// </summary>
@@ -80,8 +90,12 @@
                 throw new ArgumentNullException(nameof(args));
             }
 
+            var console = false;
+
             if (!FrameworkUpdated())
             {
+                AllocConsole();
+                console = true;
                 Console.Write("It's recommended to have .NET Framework 4.6.2 or newer installed - which was not detected on your system.\nProceeding anyway...\n\n");
             }
 
@@ -108,6 +122,22 @@
                     Process.Start(updater);
                     Environment.Exit(0);
                 }
+                
+                string elobuddy;
+
+                if (!new DirectoryInfo(dir).Name.Equals("elobuddy", StringComparison.OrdinalIgnoreCase) || (elobuddy = Directory.GetFiles(dir).Select(Path.GetFileName).SingleOrDefault(x => x.Equals("elobuddy.loader.exe", StringComparison.OrdinalIgnoreCase))) == null)
+                {
+                    if (!console)
+                    {
+                        AllocConsole();
+                    }
+
+                    Console.WriteLine("This file must be placed in EloBuddy installation folder!\nPlease move this file and try again.");
+                    Console.Read();
+                    return;
+                }
+
+                Process.Start(elobuddy);
 
                 foreach (var file in Resources)
                 {
