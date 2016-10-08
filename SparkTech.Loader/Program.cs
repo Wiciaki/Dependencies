@@ -5,7 +5,6 @@
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Linq;
     using System.Net;
 
     using Microsoft.Win32;
@@ -35,11 +34,6 @@
             /// The destination of a resource
             /// </summary>
             public string LocalPath;
-
-            /// <summary>
-            /// The temporary path
-            /// </summary>
-            public string TempPath;
         }
 
         /// <summary>
@@ -71,7 +65,7 @@
             {
                 var dll = name + ".dll";
 
-                return new ResourceData { Name = name, CloudPath = BaseWebPath + dll, LocalPath = Path.Combine(librariesPath, dll), TempPath = Path.Combine(Path.GetTempPath(), dll) };
+                return new ResourceData { Name = name, CloudPath = BaseWebPath + dll, LocalPath = Path.Combine(librariesPath, dll) };
             });
         }
 
@@ -114,36 +108,13 @@
                     Process.Start(updater);
                     Environment.Exit(0);
                 }
-                
-                string elobuddy;
-
-                if (!new DirectoryInfo(dir).Name.Equals("elobuddy", StringComparison.OrdinalIgnoreCase) || (elobuddy = Directory.GetFiles(dir).Select(Path.GetFileName).SingleOrDefault(x => x.Equals("elobuddy.loader.exe", StringComparison.OrdinalIgnoreCase))) == null)
-                {
-                    Console.WriteLine("This file must be placed in EloBuddy installation folder!\nPlease move this file and try again.");
-                    Console.Read();
-                    return;
-                }
-
-                Console.WriteLine("Please type \"done\" and hit enter after EloBuddy finishes updating!");
-
-                Process.Start(elobuddy);
 
                 foreach (var file in Resources)
                 {
                     Console.Write($@"Downloading {file.Name}...");
-                    client.DownloadFile(file.CloudPath, file.TempPath);
+                    client.DownloadFile(file.CloudPath, file.LocalPath);
                     Console.WriteLine(@" done!");
                 }
-            }
-
-            while (Console.ReadLine() != "done")
-            {
-
-            }
-
-            foreach (var resource in Resources)
-            {
-                File.Move(resource.TempPath, resource.LocalPath);
             }
         }
 
