@@ -7,7 +7,6 @@
     using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Threading;
 
     using Microsoft.Win32;
 
@@ -20,7 +19,7 @@
         /// <summary>
         /// Holds data for a specified resource
         /// </summary>
-        private struct ResourceData
+        private class ResourceData
         {
             /// <summary>
             /// The resource name
@@ -36,6 +35,11 @@
             /// The destination of a resource
             /// </summary>
             public string LocalPath;
+
+            /// <summary>
+            /// The temporary path
+            /// </summary>
+            public string TempPath;
         }
 
         /// <summary>
@@ -67,7 +71,7 @@
             {
                 var dll = name + ".dll";
 
-                return new ResourceData { Name = name, CloudPath = BaseWebPath + dll, LocalPath = Path.Combine(librariesPath, dll) };
+                return new ResourceData { Name = name, CloudPath = BaseWebPath + dll, LocalPath = Path.Combine(librariesPath, dll), TempPath = Path.Combine(Path.GetTempPath(), dll) };
             });
         }
 
@@ -84,8 +88,7 @@
 
             if (!FrameworkUpdated())
             {
-                Console.Write("It's recommended to have .NET Framework 4.6.2 or newer installed which was not detected on your system. Continuing anyway...\n\n");
-                Thread.Sleep(3000);
+                Console.Write("It's recommended to have .NET Framework 4.6.2 or newer installed - which was not detected on your system.\nProceeding anyway...\n\n");
             }
 
             var dir = Directory.GetCurrentDirectory();
@@ -99,8 +102,6 @@
                     info.Delete();
                 }
             }
-            
-            string elobuddy;
 
             using (var client = new WebClient())
             {
@@ -110,10 +111,12 @@
                 if (assemblyName.Version < new Version(web))
                 {
                     File.WriteAllBytes(updater, Properties.Resources.Updater);
-                    ExitTo(updater);
+                    Process.Start(updater);
+                    Environment.Exit(0);
                 }
+                
+                string elobuddy;
 
-                // ReSharper disable once PossibleNullReferenceException
                 if (!new DirectoryInfo(dir).Name.Equals("elobuddy", StringComparison.OrdinalIgnoreCase) || (elobuddy = Directory.GetFiles(dir).Select(Path.GetFileName).SingleOrDefault(x => x.Equals("elobuddy.loader.exe", StringComparison.OrdinalIgnoreCase))) == null)
                 {
                     Console.WriteLine("This file must be placed in EloBuddy installation folder!\nPlease move this file and try again.");
@@ -121,27 +124,27 @@
                     return;
                 }
 
-                Console.Write("Welcome! EloBuddy is starting soon...\n\n");
+                Console.WriteLine("Please type \"done\" and hit enter after EloBuddy finishes updating!");
+
+                Process.Start(elobuddy);
 
                 foreach (var file in Resources)
                 {
                     Console.Write($@"Downloading {file.Name}...");
-                    client.DownloadFile(file.CloudPath, file.LocalPath);
+                    client.DownloadFile(file.CloudPath, file.TempPath);
                     Console.WriteLine(@" done!");
                 }
             }
 
-            ExitTo(elobuddy);
-        }
+            while (Console.ReadLine() != "done")
+            {
 
-        /// <summary>
-        /// Exits the current process and starts another one
-        /// </summary>
-        /// <param name="fileName"></param>
-        private static void ExitTo(string fileName)
-        {
-            Process.Start(fileName);
-            Environment.Exit(0);
+            }
+
+            foreach (var resource in Resources)
+            {
+                File.Move(resource.TempPath, resource.LocalPath);
+            }
         }
 
         /// <summary>
