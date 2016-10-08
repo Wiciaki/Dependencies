@@ -28,8 +28,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>SparkTech.SDK.ruleset</CodeAnalysisRuleSet>
@@ -51,9 +52,10 @@
     <CodeAnalysisRuleSet>SparkTech.SDK.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
+    <OutputPath>..\Download\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <Optimize>false</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -62,6 +64,9 @@
   <ItemGroup>
     <Reference Include="EloBuddy">
       <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.dll</HintPath>
+    </Reference>
+    <Reference Include="EloBuddy.Sandbox">
+      <HintPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
       <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.SDK.dll</HintPath>
@@ -114,6 +119,11 @@
     <Compile Include="Executors\Executable.cs" />
     <Compile Include="Executors\TriggerAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SparkWalking\HealthWrapper.cs" />
     <Compile Include="SparkWalking\MinionData.cs" />
     <Compile Include="SparkWalking\PetWalker.cs" />
@@ -147,12 +157,15 @@
   <ItemGroup>
     <Folder Include="Targeting\Weights\" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>@echo off
-echo SparkTech.SDK installation....
-echo %25CD%25&gt; F:\dblank.txt
-echo Script complete! You can now close the window.</PreBuildEvent>
+    <PreBuildEvent>echo SparkTech.SDK installation....</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

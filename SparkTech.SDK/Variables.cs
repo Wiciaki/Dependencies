@@ -3,6 +3,7 @@
     using System;
     using System.Reflection;
 
+    using EloBuddy.Sandbox;
     using EloBuddy.SDK.Menu;
     using EloBuddy.SDK.Menu.Values;
 
@@ -10,7 +11,7 @@
     using SparkTech.SDK.Web;
 
     /// <summary>
-    /// The delegate used for passing argumentless Boolean pointers
+    /// The delegate used for passing argument-less Boolean pointers
     /// </summary>
     /// <returns></returns>
     public delegate bool Predicate();
@@ -18,7 +19,7 @@
     /// <summary>
     /// The main event delegate used for handling most of the event data instances
     /// </summary>
-    /// <typeparam name="TEventArgs">The destination event args</typeparam>
+    /// <typeparam name="TEventArgs">The destination event arguments</typeparam>
     /// <param name="args">The event data</param>
     public delegate void EventDataHandler<in TEventArgs>(TEventArgs args) where TEventArgs : EventArgs;
 
@@ -41,7 +42,7 @@
         /// <summary>
         /// The path to web version of the current class
         /// </summary>
-        public const string RawVariablesPath = "https://raw.githubusercontent.com/Wiciaki/EloBuddy/master/SparkTech.SDK/Variables.cs";
+        public const string RawVariablesPath = "https://raw.githubusercontent.com/Wiciaki/Dependencies/master/SparkTech.SDK/Variables.cs";
 
         /// <summary>
         /// Determines whether this run is a first one in the specified environment
@@ -83,7 +84,11 @@
 
             #region License
             {
-                SDKMenu.AddSubMenu("License", "st.sdk.license");
+                var license = SDKMenu.AddSubMenu("License", "st.sdk.license");
+                {
+                    license.AddLabel($"Welcome, {SandboxConfig.Username}");
+                    license.AddLabel($"License type: {(SandboxConfig.IsBuddy ? "Buddy" : "Pleb")}");
+                }
 
             }
             #endregion
