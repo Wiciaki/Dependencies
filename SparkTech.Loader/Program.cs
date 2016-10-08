@@ -81,14 +81,8 @@
             var dir = Directory.GetCurrentDirectory();
 
             var updater = Path.Combine(dir, "SparkTech.Updater.exe");
-            {
-                var info = new FileInfo(updater);
-
-                if (info.Exists)
-                {
-                    info.Delete();
-                }
-            }
+            DeleteIfExists(Path.Combine(dir, "Updater.exe"));
+            DeleteIfExists(updater);
 
             var assemblyName = typeof(Program).Assembly.GetName();
 
@@ -104,7 +98,7 @@
                 }
                 
                 var shortcut = (IWshShortcut)new WshShell().CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "SparkTech.lnk"));
-                shortcut.TargetPath = Path.Combine(dir, assemblyName.Name + ".exe");
+                shortcut.TargetPath = Path.Combine(dir, "SparkTech.Loader.exe");
                 shortcut.WorkingDirectory = dir;
                 shortcut.Save();
 
@@ -125,6 +119,16 @@
                 {
                     client.DownloadFile(file.CloudPath, file.LocalPath);
                 }
+            }
+        }
+
+        private static void DeleteIfExists(string path)
+        {
+            var info = new FileInfo(path);
+
+            if (info.Exists)
+            {
+                info.Delete();
             }
         }
     }
