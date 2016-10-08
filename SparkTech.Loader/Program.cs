@@ -104,7 +104,7 @@
                 }
                 
                 var shortcut = (IWshShortcut)new WshShell().CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "SparkTech.lnk"));
-                shortcut.TargetPath = Path.Combine(dir, assemblyName.Name);
+                shortcut.TargetPath = Path.Combine(dir, assemblyName.Name + ".exe");
                 shortcut.WorkingDirectory = dir;
                 shortcut.Save();
 
