@@ -8,8 +8,11 @@
     using System.Linq;
     using System.Net;
     using System.Runtime.InteropServices;
+    using System.Threading;
 
-    using Microsoft.Win32;
+    using IWshRuntimeLibrary;
+
+    using File = System.IO.File;
 
     /// <summary>
     /// The <see cref="Program"/> class
@@ -27,13 +30,8 @@
         /// <summary>
         /// Holds data for a specified resource
         /// </summary>
-        private class ResourceData
+        private struct ResourceData
         {
-            /// <summary>
-            /// The resource name
-            /// </summary>
-            public string Name;
-
             /// <summary>
             /// The download link for a resource
             /// </summary>
@@ -56,11 +54,6 @@
         private const string BaseWebPath = "https://raw.githubusercontent.com/Wiciaki/Dependencies/master/Download/";
 
         /// <summary>
-        /// The minimum .NET Framework version
-        /// </summary>
-        private const int MinRecommendedDotNetVersion = 394802;
-
-        /// <summary>
         /// Initializes static members of the <see cref="Program"/> class
         /// </summary>
         static Program()
@@ -72,9 +65,9 @@
 
             Resources = libs.ConvertAll(name =>
             {
-                var dll = name + ".dll";
+                name += ".dll";
 
-                return new ResourceData { Name = name, CloudPath = BaseWebPath + dll, LocalPath = Path.Combine(librariesPath, dll) };
+                return new ResourceData { CloudPath = BaseWebPath + name, LocalPath = Path.Combine(librariesPath, name) };
             });
         }
 
@@ -82,25 +75,12 @@
         /// The entry point for an application
         /// </summary>
         /// <param name="args">The empty, non-null string array</param>
+        // ReSharper disable once UnusedParameter.Local
         private static void Main(string[] args)
         {
-            if (args == null)
-            {
-                throw new ArgumentNullException(nameof(args));
-            }
-
-            var console = false;
-
-            if (!FrameworkUpdated())
-            {
-                AllocConsole();
-                console = true;
-                Console.Write("It's recommended to have .NET Framework 4.6.2 or newer installed - which was not detected on your system.\nProceeding anyway...\n\n");
-            }
-
             var dir = Directory.GetCurrentDirectory();
 
-            var updater = Path.Combine(dir, "Updater.exe");
+            var updater = Path.Combine(dir, "SparkTech.Updater.exe");
             {
                 var info = new FileInfo(updater);
 
@@ -110,51 +90,42 @@
                 }
             }
 
+            var assemblyName = typeof(Program).Assembly.GetName();
+
             using (var client = new WebClient())
             {
-                var assemblyName = typeof(Program).Assembly.GetName();
                 var web = client.DownloadString(BaseWebPath + assemblyName.Name + ".txt");
 
                 if (assemblyName.Version < new Version(web))
                 {
-                    File.WriteAllBytes(updater, Properties.Resources.Updater);
+                    File.WriteAllBytes(updater, Properties.Resources.SparkTech_Updater);
                     Process.Start(updater);
                     Environment.Exit(0);
                 }
                 
+                var shortcut = (IWshShortcut)new WshShell().CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "SparkTech.lnk"));
+                shortcut.TargetPath = Path.Combine(dir, assemblyName.Name);
+                shortcut.WorkingDirectory = dir;
+                shortcut.Save();
+
                 string elobuddy;
 
                 if (!new DirectoryInfo(dir).Name.Equals("elobuddy", StringComparison.OrdinalIgnoreCase) || (elobuddy = Directory.GetFiles(dir).Select(Path.GetFileName).SingleOrDefault(x => x.Equals("elobuddy.loader.exe", StringComparison.OrdinalIgnoreCase))) == null)
                 {
-                    if (!console)
-                    {
-                        AllocConsole();
-                    }
-
+                    AllocConsole();
                     Console.WriteLine("This file must be placed in EloBuddy installation folder!\nPlease move this file and try again.");
                     Console.Read();
                     return;
                 }
 
                 Process.Start(elobuddy);
+                Thread.Sleep(3000);
 
                 foreach (var file in Resources)
                 {
-                    Console.Write($@"Downloading {file.Name}...");
                     client.DownloadFile(file.CloudPath, file.LocalPath);
-                    Console.WriteLine(@" done!");
                 }
             }
-        }
-
-        /// <summary>
-        /// Determines whether at least the recommended version of 
-        /// </summary>
-        /// <returns></returns>
-        private static bool FrameworkUpdated()
-        {
-            var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full");
-            return key != null && Convert.ToUInt32(key.GetValue("Release", 0)) > MinRecommendedDotNetVersion;
         }
     }
 }

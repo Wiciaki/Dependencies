@@ -63,9 +63,9 @@ namespace SparkTech.Loader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Updater {
+        internal static byte[] SparkTech_Updater {
             get {
-                object obj = ResourceManager.GetObject("Updater", resourceCulture);
+                object obj = ResourceManager.GetObject("SparkTech_Updater", resourceCulture);
                 return ((byte[])(obj));
             }
         }
