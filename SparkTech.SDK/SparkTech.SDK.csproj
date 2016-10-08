@@ -27,8 +27,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\</OutputPath>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Download\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -66,7 +66,7 @@
       <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.Sandbox">
-      <HintPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.Sandbox.dll</HintPath>
+      <HintPath>C:\Users\akloj\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
       <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.SDK.dll</HintPath>
