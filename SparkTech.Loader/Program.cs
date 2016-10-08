@@ -20,7 +20,7 @@
         /// <summary>
         /// Holds data for a specified resource
         /// </summary>
-        private struct Handlable
+        private struct ResourceData
         {
             /// <summary>
             /// The resource name
@@ -41,7 +41,7 @@
         /// <summary>
         /// The resource data
         /// </summary>
-        private static readonly List<Handlable> Files;
+        private static readonly List<ResourceData> Resources;
 
         /// <summary>
         /// The beginning for download links
@@ -63,11 +63,11 @@
 
             var libs = new List<string> { "SparkTech.SDK", "NLog", "MoreLinq" /*, "JetBrains.Annotations" */ };
 
-            Files = libs.ConvertAll(name =>
+            Resources = libs.ConvertAll(name =>
             {
                 var dll = name + ".dll";
 
-                return new Handlable { Name = name, CloudPath = BaseWebPath + dll, LocalPath = Path.Combine(librariesPath, dll) };
+                return new ResourceData { Name = name, CloudPath = BaseWebPath + dll, LocalPath = Path.Combine(librariesPath, dll) };
             });
         }
 
@@ -123,7 +123,7 @@
 
                 Console.Write("Welcome! EloBuddy is starting soon...\n\n");
 
-                foreach (var file in Files)
+                foreach (var file in Resources)
                 {
                     Console.Write($@"Downloading {file.Name}...");
                     client.DownloadFile(file.CloudPath, file.LocalPath);
