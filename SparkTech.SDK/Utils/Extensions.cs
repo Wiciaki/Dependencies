@@ -87,5 +87,15 @@
         {
             return @string.Replace(text, "");
         }
+
+        /// <summary>
+        /// Converts this string instance to be usable for the menu
+        /// </summary>
+        /// <param name="input">The <see cref="string"/> instance</param>
+        /// <returns></returns>
+        public static string ToMenuUse(this string input)
+        {
+            return input.Space().ToLower().Replace('\'', ' ').Trim().Replace(' ', '_');
+        }
     }
 }

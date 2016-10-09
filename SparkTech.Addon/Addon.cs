@@ -25,6 +25,11 @@
         private static readonly Menu Menu;
 
         /// <summary>
+        /// The mode menu instance
+        /// </summary>
+        private static readonly Menu Combo, Harass;
+
+        /// <summary>
         /// Initializes static members of the <see cref="Addon"/> class
         /// </summary>
         static Addon()
@@ -48,12 +53,12 @@
             {
                 codeName += ".";
 
-                var combo = Menu.AddSubMenu("Combo", codeName + "combo");
+                Combo = Menu.AddSubMenu("Combo", codeName + "combo");
                 {
-                    combo.Add(codeName + "combo.q", new CheckBox("Q usage"));
+                    Combo.Add(codeName + "combo.q", new CheckBox("Q usage"));
                 }
 
-                var harass = Menu.AddSubMenu("Harass", codeName + "harass");
+                Harass = Menu.AddSubMenu("Harass", codeName + "harass");
                 {
 
                 }
@@ -93,7 +98,7 @@
         /// <param name="args">The empty <see cref="EventArgs"/> instance</param>
         private static void OnTick(EventArgs args)
         {
-            if (Menu.Get<CheckBox>("st.addon.combo.q").CurrentValue)
+            if (Combo["st.addon.combo.q"].Cast<CheckBox>().CurrentValue)
             {
                 
             }

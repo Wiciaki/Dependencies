@@ -64,12 +64,15 @@
   <ItemGroup>
     <Reference Include="EloBuddy">
       <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="EloBuddy.Sandbox">
       <HintPath>C:\Users\akloj\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.Sandbox.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="EloBuddy.SDK">
       <HintPath>C:\Program Files (x86)\EloBuddy\System\EloBuddy.SDK.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\net\JetBrains.Annotations.dll</HintPath>
@@ -81,18 +84,18 @@
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Program Files (x86)\EloBuddy\System\SharpDX.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
       <HintPath>C:\Program Files (x86)\EloBuddy\System\SharpDX.Direct3D9.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Speech" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache\EnumCache.cs" />
@@ -132,6 +135,7 @@
     <Compile Include="Utils\Converters.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Minion.cs" />
+    <Compile Include="Utils\ObjectText.cs" />
     <Compile Include="Utils\ObjectTracker.cs" />
     <Compile Include="Utils\Randomizer.cs" />
     <Compile Include="Utils\TickOperation.cs" />

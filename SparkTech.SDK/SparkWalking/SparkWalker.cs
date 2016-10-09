@@ -21,6 +21,9 @@ namespace SparkTech.SDK.SparkWalking
 
     using DrawingClass = EloBuddy.Drawing;
     using Prediction = EloBuddy.SDK.Prediction.Position;
+    using HealthPrediction = EloBuddy.SDK.Prediction.Health;
+
+    using Keys = System.Windows.Forms.Keys;
 
     /// <summary>
     /// An alternative to the <see cref="EloBuddy.SDK.Orbwalker"/> class.
@@ -28,6 +31,30 @@ namespace SparkTech.SDK.SparkWalking
     [Trigger]
     public class SparkWalker : Executable
     {
+        #region Menus
+
+        /// <summary>
+        /// The orbwalker's main menu instance
+        /// </summary>
+        private static readonly Menu Menu = MainMenu.AddMenu("SparkWalker", "st_orb");
+
+        /// <summary>
+        /// The orbwalker's main menu instance
+        /// </summary>
+        private static readonly Menu Targeting = Menu.AddSubMenu("Targeting", "st_orb_targeting");
+
+        /// <summary>
+        /// The orbwalker's main menu instance
+        /// </summary>
+        private static readonly Menu Misc = Menu.AddSubMenu("Miscallenous", "st_orb_misc");
+
+        /// <summary>
+        /// The <see cref="Dictionary{TKey, TValue}"/> chain
+        /// </summary>
+        private static readonly Dictionary<Mode, Menu> ModeMenu = new Dictionary<Mode, Menu>(EnumCache<Mode>.Count);
+
+        #endregion
+
         #region Attackable Objects
 
         /// <summary>
@@ -38,29 +65,29 @@ namespace SparkTech.SDK.SparkWalking
             /// <summary>
             /// The display name of the object
             /// </summary>
-            internal readonly string DisplayName;
+            public readonly string DisplayName;
 
             /// <summary>
             /// The indication whether the item should be added to menu
             /// </summary>
-            internal readonly bool AddToMenu;
+            public readonly bool AddToMenu;
 
             /// <summary>
             /// The indication whether to enable the menu item by default
             /// </summary>
-            internal readonly bool AttackByDefault;
+            public readonly bool AttackByDefault;
 
             /// <summary>
             /// The <see cref="Predicate"/> determining whether to attack
             /// </summary>
-            internal readonly Predicate Attack;
+            public readonly Predicate Attack;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ObjectInfo"/> nested class
             /// </summary>
             /// <param name="attackByDef">Attack by default</param>
             /// <param name="displayName">Display name</param>
-            internal ObjectInfo(string displayName, bool attackByDef = true)
+            public ObjectInfo(string displayName, bool attackByDef = true)
             {
                 displayName = displayName.ToMenuUse();
 
@@ -68,7 +95,7 @@ namespace SparkTech.SDK.SparkWalking
 
                 this.AttackByDefault = attackByDef;
 
-                this.Attack = () => Menu["targeting"]["objects"][displayName];
+                this.Attack = () => Targeting[displayName].Cast<CheckBox>().CurrentValue;
 
                 this.DisplayName = displayName;
             }
@@ -161,7 +188,7 @@ namespace SparkTech.SDK.SparkWalking
             /// <summary>
             /// The key for mode to be activated
             /// </summary>
-            internal readonly Key Key;
+            internal readonly Keys Key;
 
             /// <summary>
             /// An array of <see cref="UnitType"/> the mode should be enabled by default for
@@ -173,7 +200,7 @@ namespace SparkTech.SDK.SparkWalking
             /// </summary>
             /// <param name="key">The key for mode to be activated</param>
             /// <param name="unitsEnabled">An array of <see cref="UnitType"/> the mode should be enabled by default for</param>
-            internal ModeConfig(Key key, params UnitType[] unitsEnabled)
+            internal ModeConfig(Keys key, params UnitType[] unitsEnabled)
             {
                 this.Key = key;
 
@@ -191,13 +218,13 @@ namespace SparkTech.SDK.SparkWalking
                                                                                          {
                                                                                              Mode.Combo,
                                                                                              new ModeConfig(
-                                                                                             Key.Space,
+                                                                                             Keys.Space,
                                                                                              UnitType.Champion)
                                                                                          },
                                                                                          {
                                                                                              Mode.LaneClear,
                                                                                              new ModeConfig(
-                                                                                             Key.V,
+                                                                                             Keys.V,
                                                                                              UnitType.LaneMinion,
                                                                                              UnitType.Structure,
                                                                                              UnitType.Object,
@@ -208,25 +235,25 @@ namespace SparkTech.SDK.SparkWalking
                                                                                          {
                                                                                              Mode.Harass,
                                                                                              new ModeConfig(
-                                                                                             Key.C,
+                                                                                             Keys.C,
                                                                                              UnitType.LaneMinion,
                                                                                              UnitType.Champion)
                                                                                          },
                                                                                          {
                                                                                              Mode.Freeze,
                                                                                              new ModeConfig(
-                                                                                             Key.A,
+                                                                                             Keys.A,
                                                                                              UnitType.LaneMinion)
                                                                                          },
                                                                                          {
                                                                                              Mode.LastHit,
                                                                                              new ModeConfig(
-                                                                                             Key.X,
+                                                                                             Keys.X,
                                                                                              UnitType.LaneMinion)
                                                                                          },
                                                                                          {
                                                                                              Mode.Flee,
-                                                                                             new ModeConfig(Key.Z)
+                                                                                             new ModeConfig(Keys.Z)
                                                                                          }
                                                                                      };
 
@@ -247,7 +274,7 @@ namespace SparkTech.SDK.SparkWalking
         /// <summary>
         /// Gets the stop order
         /// </summary>
-        protected virtual GameObjectOrder StopOrder => Menu["misc"]["stop_order"].GetValue<MenuList<GameObjectOrder>>().SelectedValue;
+        protected virtual GameObjectOrder StopOrder => Misc["stop_order"].Cast<ComboBox>().GetValue<GameObjectOrder>();
 
         #endregion
 
@@ -256,7 +283,7 @@ namespace SparkTech.SDK.SparkWalking
         /// <summary>
         /// Gets the current tick count
         /// </summary>
-        protected virtual float TickCount => Game.Time * 1000f;
+        protected static float TickCount => Game.Time * 1000f;
 
         /// <summary>
         /// A list of buff names getting which resets the auto attack timer
@@ -269,11 +296,6 @@ namespace SparkTech.SDK.SparkWalking
         protected static readonly Random Random = new Random();
 
         /// <summary>
-        /// The orbwalkEloBuddy.SDK.Menu.Menure.UI.IMenu.SDKMenu"/> instance
-        /// </summary>
-        protected static readonly Menu SDKMenu = new SDKMenu("st_orb", "SparkWalker [EARLY]");
-
-        /// <summary>
         /// The names of the priorities
         /// </summary>
         private static readonly List<string> Priorities;
@@ -281,12 +303,7 @@ namespace SparkTech.SDK.SparkWalking
         /// <summary>
         /// Gets the extra holdzone radius
         /// </summary>
-        public static int ExtraHoldZone => Menu["misc"]["extra_holdzone"];
-
-        /// <summary>
-        /// Gets the current farm delay
-        /// </summary>
-        public static int FarmDelay => Menu["misc"]["farmdelay"];
+        public static int ExtraHoldZone => Misc["extra_holdzone"].Cast<Slider>().CurrentValue;
 
         #endregion
 
@@ -300,27 +317,25 @@ namespace SparkTech.SDK.SparkWalking
         /// <summary>
         /// The cached <see cref="Vector3"/> position of the <see cref="Unit"/>
         /// </summary>
-        private Vector3 ServerPosition3D { get; set; }
+        // ReSharper disable once InconsistentNaming
+        private Vector3 ServerPosition3D;
 
         /// <summary>
         /// The cached <see cref="Vector2"/> position of the <see cref="Unit"/>
         /// </summary>
-        private Vector2 ServerPosition2D { get; set; }
+        // ReSharper disable once InconsistentNaming
+        private Vector2 ServerPosition2D;
 
         /// <summary>
         /// The <see cref="ObjectText"/> entry
         /// </summary>
-        private ObjectTextEntry objectTextEntry;
+        private readonly ObjectTextEntry objectTextEntry;
 
         /// <summary>
         /// The last reset tick
         /// </summary>
-        private float LastResetTick { get; set; }
-
-        /// <summary>
-        /// The backing field for <see cref="E:Enabled"/>
-        /// </summary>
-        private bool enabled;
+        // ReSharper disable once InconsistentNaming
+        private float LastResetTick;
 
         /// <summary>
         /// Gets the orbwalking unit
@@ -342,15 +357,14 @@ namespace SparkTech.SDK.SparkWalking
         /// <param name="managed">Determines whether managed sources should be cleaned</param>
         protected override void Dispose(bool managed)
         {
+            ObjectText.Entries.Remove(this.objectTextEntry);
+
             if (!managed)
             {
                 return;
             }
 
             this.Enabled = false;
-
-            ObjectText.Entries.Remove(this.objectTextEntry);
-            this.objectTextEntry = null;
         }
 
         #endregion
@@ -383,25 +397,7 @@ namespace SparkTech.SDK.SparkWalking
         /// <param name="args">The event data</param>
         private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            // Apparently everything controllable should be checked per Player, not per other unit,
-            // therefore the IsMe check should be used here and not Comparison()
-            if (!sender.IsMe)
-            {
-                return;
-            }
-
-            var name = args.SData.Name.ToLower();
-
-            if (this.IsAutoAttack(name))
-            {
-                var tick = this.TickCount - this.Latency;
-
-                if (Math.Abs(tick - this.LastAttackStartingT) >= 80f)
-                {
-                    this.LastAttackStartingT = tick;
-                }
-            }
-            else if (this.IsAutoAttackReset(name))
+            if (this.Comparison(sender) && this.IsAutoAttackReset(args.SData.Name))
             {
                 this.ResetTimer(true);
             }
@@ -418,7 +414,7 @@ namespace SparkTech.SDK.SparkWalking
 
             this.ServerPosition3D = unit.ServerPosition;
 
-            this.ServerPosition2D = this.ServerPosition3D.ToVector2();
+            this.ServerPosition2D = this.ServerPosition3D.To2D();
         }
 
         private void OnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffAddEventArgs args)
@@ -434,6 +430,21 @@ namespace SparkTech.SDK.SparkWalking
             if (this.Comparison(spellbook.Owner) && args.StopAnimation && args.DestroyMissile && !args.ForceStop)
             {
                 this.ResetTimer(true);
+            }
+        }
+
+        private void OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!this.Comparison(sender))
+            {
+                return;
+            }
+
+            var tick = TickCount - this.Latency;
+
+            if (Math.Abs(tick - this.LastAttackStartingT) >= 80f)
+            {
+                this.LastAttackStartingT = tick;
             }
         }
 
@@ -569,6 +580,11 @@ namespace SparkTech.SDK.SparkWalking
         /// Gets or sets the movement
         /// </summary>
         public bool Movement = true;
+
+        /// <summary>
+        /// The backing field for <see cref="E:Enabled"/>
+        /// </summary>
+        private bool enabled;
 
         /// <summary>
         /// Determines whether this <see cref="SparkWalker"/> instance has been enabled
@@ -754,7 +770,7 @@ namespace SparkTech.SDK.SparkWalking
                     }
                 }
 
-                modesMenu.Add(new MenuKeyBind("st_orb_key_movblock", "Movement block", Key.P, KeyBindType.Press));
+                modesMenu.Add(new MenuKeyBind("st_orb_key_movblock", "Movement block", Keys.P, KeyBindType.Press));
             }
 
             var drawMenu = Menu.Add(new SDKMenu("st_orb_draw", "Drawings"));
@@ -832,7 +848,7 @@ namespace SparkTech.SDK.SparkWalking
                         {
                             var args = new BeforeOrbwalkerAttack(target);
 
-                            BeforeUnhumanAttack?.Invoke(args);
+                            this.BeforeOrbwalkerAttack?.Invoke(args);
 
                             if (!args.CancelAttack)
                             {
@@ -1116,27 +1132,29 @@ namespace SparkTech.SDK.SparkWalking
         /// <returns></returns>
         public bool InAttackRange(AttackableUnit target)
         {
-            var unit = this.Unit;
-
-            if (unit == null || target == null || !target.IsValid)
+            if (!target.IsValid())
             {
                 return false;
             }
+
+            var unit = this.Unit;
 
             var range = (unit.AttackRange + unit.BoundingRadius + target.BoundingRadius).Pow();
             var @base = target as Obj_AI_Base;
 
             if (@base == null)
             {
-                return Vector2.DistanceSquared(this.ServerPosition2D, target.Position.ToVector2()) <= range;
+                return this.ServerPosition2D.Distance(target, true) <= range;
             }
 
-            if (Vector2.DistanceSquared(this.ServerPosition2D, @base.ServerPosition.ToVector2()) <= range)
+            if (this.ServerPosition2D.Distance(@base, true) <= range)
             {
                 return true;
             }
 
-            return unit.NetworkId == ObjectCache.Player.NetworkId && @base.GetSoldiers().Count > 0;
+            var source = unit as AIHeroClient;
+
+            return source != null && source.Hero == Champion.Azir && source.GetSoldiers(@base).Count > 0;
         }
 
         /// <summary>
@@ -1208,19 +1226,6 @@ namespace SparkTech.SDK.SparkWalking
             return this.TimeToAttack(mode) < float.Epsilon;
         }
 
-        private float AttackDelay
-        {
-            get
-            {
-                if (this.me && Core.ChampionName == "Graves")
-                {
-                    return this.Unit.AttackDelay * 1074.03f - 716.2381f;
-                }
-
-                return this.Unit.AttackDelay * 1000f;
-            }
-        }
-
         private static float Speed => 1f - Menu["misc"]["speed"] / 100f;
 
 
@@ -1229,7 +1234,7 @@ namespace SparkTech.SDK.SparkWalking
         public float TimeToAttack(ushort extraMovement)
         {
             var unit = this.Unit;
-            var delay = this.AttackDelay;
+            var delay = this.Unit.AttackDelay * 1000f;
             var calcLatency = true;
 
             if (extraMovement != 0)
@@ -1249,7 +1254,7 @@ namespace SparkTech.SDK.SparkWalking
                 }
             }
 
-            var buffs = Array.FindAll(unit.Buffs, buff => buff.IsValid).ToList();
+            var buffs = unit.Buffs.FindAll(buff => buff.IsValid);
 
             if (buffs.Count > 0)
             {
@@ -1261,11 +1266,12 @@ namespace SparkTech.SDK.SparkWalking
                     endTimes.Add(dehancers.Max(buff => buff.EndTime));
                 }
 
-                if (this.IsMe)
+                var hero = unit as AIHeroClient;
+                if (hero != null)
                 {
-                    switch (Core.ChampionName)
+                    switch (hero.Hero)
                     {
-                        case "Jhin":
+                        case Champion.Jhin:
                             var reload = buffs.Find(buff => buff.Name.Equals("jhinpassivereload", StringComparison.OrdinalIgnoreCase));
 
                             if (reload != null)
@@ -1273,7 +1279,7 @@ namespace SparkTech.SDK.SparkWalking
                                 endTimes.Add(reload.EndTime);
                             }
                             break;
-                        case "Graves":
+                        case Champion.Graves:
 
                             break;
                     }
@@ -1302,7 +1308,7 @@ namespace SparkTech.SDK.SparkWalking
                 }
             }
 
-            return Math.Max(time - this.TickCount, 0f);
+            return Math.Max(time - TickCount, 0f);
         }
 
         public float TimeToAttack(Mode? mode = null)
@@ -1339,16 +1345,6 @@ namespace SparkTech.SDK.SparkWalking
 
             return Priorities.ConvertAll(priority => menu[priority].GetValue<MenuList<UnitType>>().SelectedValue)
                     .ToHashSet();
-        }
-
-        /// <summary>
-        /// Gets the mode menu
-        /// </summary>
-        /// <param name="mode">The specified mode</param>
-        /// <returns></returns>
-        private static AMenuComponent ModeMenu(Mode mode)
-        {
-            return Menu["st_orb_modes"]["st_orb_mode_" + mode.ToString().ToLower()];
         }
 
         #endregion
@@ -1402,7 +1398,7 @@ namespace SparkTech.SDK.SparkWalking
                 case UnitType.LaneClearMinion:
                     return this.GetBalanceMinion(checkNormal(), mode == Mode.Freeze);
                 case UnitType.JungleMinion:
-                    return this.GetJungleMinion();
+                    return this.GetJungleMinion(Targeting["jungle_smallfirst"].Cast<CheckBox>().CurrentValue);
                 case UnitType.None:
                     return TargetData.Empty;
                 default:
@@ -1516,8 +1512,8 @@ namespace SparkTech.SDK.SparkWalking
         private TargetData GetHero()
         {
             int ammo;
-            var soldier = this.CanPlaceSoldier(out ammo) && Menu["targeting"]["champions"]["soldier"];
-            var pref = (bool)Menu["targeting"]["champions"]["moresoldiers"];
+            var soldier = this.CanPlaceSoldier(out ammo) && Targeting["soldier"].Cast<CheckBox>().CurrentValue;
+            var pref = Targeting["moresoldiers"].Cast<CheckBox>().CurrentValue;
 
             var targets = Variables.TargetSelector.GetTargets(
                     float.PositiveInfinity,
@@ -1562,6 +1558,7 @@ namespace SparkTech.SDK.SparkWalking
 
             PlaceSoldier(target);
             return new TargetData(target);
+            
         }
 
         /// <summary>
@@ -1584,10 +1581,10 @@ namespace SparkTech.SDK.SparkWalking
             }
 
             return new TargetData(from minion in ObjectCache.GetMinions(ObjectTeam.Enemy, MinionType.Minion, this.InAttackRange)
-                                  let pred = HealthWrapper.GetPrediction(minion, (this.AttackTime() * 2f + this.ProjectileTime(minion)).Round(), FarmDelay)
+                                  let pred = HealthPrediction.GetPrediction(minion, (this.AttackTime() * 2f + this.ProjectileTime(minion)).Round())
                                   let damage = this.AttackDamage(minion)
                                   where pred >= 2f * damage || Math.Abs(pred - minion.Health) < 1f
-                                  orderby minion.MaxHealth descending, this.Unit.DistanceSquared(minion)
+                                  orderby minion.MaxHealth descending, this.Unit.Distance(minion)
                                   select minion);
         }
 
@@ -1595,93 +1592,13 @@ namespace SparkTech.SDK.SparkWalking
         /// Gets the jungle minion
         /// </summary>
         /// <returns></returns>
-        private TargetData GetJungleMinion()
+        private TargetData GetJungleMinion(bool smallfirst)
         {
-            bool smallfirst = Menu["targeting"]["jungle"]["targetsmallfirst"];
-
             return new TargetData(
                 from minion in ObjectCache.GetMinions(ObjectTeam.Neutral, MinionType.Jungle, this.InAttackRange)
                 let type = minion.DetermineType()
                 orderby type == AIMinionType.JungleSmall == smallfirst descending, type descending, minion.Health, this.Unit.Distance(minion)
                 select minion);
-        }
-
-        #endregion
-
-        #region Azir Wrappers
-
-        /// <summary>
-        /// The full attack range of the soldier
-        /// </summary>
-        public const int WarriorRange = 350;
-
-        /// <summary>
-        /// The full attack range of the soldier, squared
-        /// </summary>
-        public const int WarriorRangeSqr = WarriorRange * WarriorRange;
-
-        /// <summary>
-        /// The possible range of W, squared
-        /// </summary>
-        public const int PossibleRangeSqr = 640000;
-
-        private static ObjectTracker<Obj_AI_Minion> SoldierTracker => SoldierManager.GetTracker(ObjectCache.Player);
-
-        public static List<Obj_AI_Minion> Soldiers => SoldierTracker.Items;
-
-        public static List<Obj_AI_Minion> SoldiersCanAttack
-        {
-            get
-            {
-                var playerPos = ObjectCache.Player.ServerPosition.To2D();
-
-                return Soldiers.FindAll(soldier => !soldier.IsMoving && soldier.Distance(playerPos) <= 800F);
-            }
-        }
-
-        public static List<Obj_AI_Minion> GetSoldiers(Obj_AI_Base target, )
-        {
-            // Assumptions for the player to attack a target using soldiers:
-            // Player is Azir
-            // The target can be attacked
-            // Target is a hero, a lane or a jungle minion
-            // Target is no more than 1000 units from player
-            // Target is no more than 350 units from the soldier
-            // Soldier is no more than 800 units from player
-            // Soldier isn't moving
-
-            if (!target.IsValidTarget())
-            {
-                return MiscallenousCache.GetEmptyList<Obj_AI_Minion>();
-            }
-
-            var position = target.ServerPosition.To2D();
-
-            if (Vector2.DistanceSquared(ObjectCache.Player.ServerPosition.To2D(), position) > 1000000F)
-            {
-                return MiscallenousCache.GetEmptyList<Obj_AI_Minion>();
-            }
-
-            var minion = target as Obj_AI_Minion;
-
-            if (minion != null)
-            {
-                var type = minion.DetermineType();
-
-                if (type == AIMinionType.Ward || type == AIMinionType.Unknown)
-                {
-                    return MiscallenousCache.GetEmptyList<Obj_AI_Minion>();
-                }
-            }
-            else
-            {
-                if (!(target is AIHeroClient))
-                {
-                    return MiscallenousCache.GetEmptyList<Obj_AI_Minion>();
-                }
-            }
-
-            return SoldiersCanAttack.FindAll(soldier => soldier.Distance(position, true) <= WarriorRangeSqr);
         }
 
         #endregion

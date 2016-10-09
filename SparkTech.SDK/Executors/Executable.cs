@@ -45,7 +45,7 @@
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        /// <param name="managed">Determines whether managed sources should be cleaned</param>
+        /// <param name="managed">Determines whether managed resources should be cleaned</param>
         protected abstract void Dispose(bool managed);
 
         /// <summary>

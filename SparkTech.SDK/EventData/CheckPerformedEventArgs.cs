@@ -2,8 +2,12 @@
 {
     using System;
 
+    using EloBuddy;
+
     using SparkTech.SDK.Enumerations;
     using SparkTech.SDK.Utils;
+
+    using Version = System.Version;
 
     /// <summary>
     /// The instance containing event data regarding any of the updaters
@@ -15,19 +19,14 @@
         /// </summary>
         public void Notify()
         {
-            if (this.notified)
-            {
-                return;
-            }
-
-            this.notified = true;
+            Chat.Print(this.StatusMessage);
 
             // ex. "You are using the latest version of [NAME]"
             // Comms.Print(Translations.GetTranslation(("updater_" + (this.Success ? this.IsUpdated ? "updated" : "available" : "error")).Replace("[NAME]", this.assemblyName), this.MessageLanguage));
         }
 
         /// <summary>
-        /// The cloud <see cref="Version"/> of the assembly
+        /// The cloud <see cref="System.Version"/> of the assembly
         /// </summary>
         public readonly Version GitVersion;
 
@@ -47,6 +46,11 @@
         public bool IsUpdated => this.LocalVersion >= this.GitVersion;
 
         /// <summary>
+        /// Gets the current status message
+        /// </summary>
+        public string StatusMessage => this.Success ? this.IsUpdated ? $"Congratulations! {this.assemblyName} is updated!" : $"A new update for {this.assemblyName} is available" : $"Can't check update for {this.assemblyName}";
+
+        /// <summary>
         /// The message <see cref="Language"/>
         /// </summary>
         public Language MessageLanguage /*= Translations.CurrentLanguage*/;
@@ -55,11 +59,6 @@
         /// The locally saved assembly name
         /// </summary>
         private readonly string assemblyName;
-
-        /// <summary>
-        /// Inidicates whether the check has already been printed
-        /// </summary>
-        private bool notified;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckPerformedEventArgs"/> class with a cloud <see cref="Version"/>, a local <see cref="Version"/> and an assembly name

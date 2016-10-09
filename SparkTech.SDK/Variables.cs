@@ -97,6 +97,8 @@
                         sdkVerion.DisplayName = args.IsUpdated
                                                   ? "Your copy of SparkTech.SDK is up to date"
                                                   : "A new update is available!";
+
+                        args.Notify();
                     };
                 }
             }
@@ -113,6 +115,8 @@
                 info.AddLabel("Discord: @spark");
             }
             #endregion
+
+            
         }
     }
 }

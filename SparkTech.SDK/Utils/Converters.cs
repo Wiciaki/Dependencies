@@ -24,16 +24,6 @@
             return (int)Math.Round(value, MidpointRounding.ToEven);
         }
 
-        /// <summary>
-        /// Returns a floating point number increased to the ^2 power
-        /// </summary>
-        /// <param name="value">The value</param>
-        /// <returns></returns>
-        public static float Pow(this float value)
-        {
-            return value * value;
-        }
-
         public static double Root(this double value, double level = 2d)
         {
             return Math.Pow(value, 1d / level);
