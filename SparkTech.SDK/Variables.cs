@@ -77,51 +77,40 @@
 
             #region Version
             {
-                SDKMenu.AddSubMenu("Version", "st.sdk.version");
-
-            }
-            #endregion
-
-            #region License
-            {
-                var license = SDKMenu.AddSubMenu("License", "st.sdk.license");
-                {
-                    license.AddLabel($"Welcome, {SandboxConfig.Username}");
-                    license.AddLabel($"License type: {(SandboxConfig.IsBuddy ? "Buddy" : "Pleb")}");
-                }
-
-            }
-            #endregion
-
-            #region Info
-            {
-                var info = SDKMenu.AddSubMenu("About", "st.sdk.info");
-                info.AddGroupLabel("Version");
-                var allow = new CheckBox("Perform update checks");
-                info.Add("st.sdk.info.version.check", allow);
-                var version = new Label(allow.CurrentValue ? "Version - Checking failure!" : "Update checks disabled");
-                info.Add("st.sdk.info.version", version);
-                info.AddSeparator();
-                info.AddGroupLabel("Please report any bugs or suggestions at:");
-                info.AddLabel("Skype: \"wiktorsharp\"");
-                info.AddLabel("Discord: @spark");
+                var version = SDKMenu.AddSubMenu("Version", "st.sdk.version");
+                var allow = new CheckBox("Allow update checks");
+                version.Add("st.sdk.info.version.check", allow);
+                var sdkVerion = new Label(allow.CurrentValue ? "Version - Checking failure!" : "Update checks disabled");
+                version.Add("st.sdk.info.version", sdkVerion);
 
                 if (allow.CurrentValue)
                 {
                     var assemblyName = Assembly.GetName();
 
                     new SparkTechUpdater(assemblyName.Version, assemblyName.Name, "SDK").CheckPerformed += args =>
+                    {
+                        if (!args.Success)
                         {
-                            if (!args.Success)
-                            {
-                                return;
-                            }
+                            return;
+                        }
 
-                            version.DisplayName = args.IsUpdated
-                                                      ? "Your copy of SparkTech.SDK is up to date"
-                                                      : "A new update is available!";
-                        };
+                        sdkVerion.DisplayName = args.IsUpdated
+                                                  ? "Your copy of SparkTech.SDK is up to date"
+                                                  : "A new update is available!";
+                    };
                 }
+            }
+            #endregion
+
+            #region Info
+            {
+                var info = SDKMenu.AddSubMenu("About", "st.sdk.info");
+                info.AddLabel($"Welcome, \"{SandboxConfig.Username}\" :)");
+                info.AddLabel($"License type: {(SandboxConfig.IsBuddy ? "Buddy" : "Pleb")}");
+                info.AddSeparator();
+                info.AddGroupLabel("Please report any bugs or suggestions at:");
+                info.AddLabel("Skype: \"wiktorsharp\"");
+                info.AddLabel("Discord: @spark");
             }
             #endregion
         }

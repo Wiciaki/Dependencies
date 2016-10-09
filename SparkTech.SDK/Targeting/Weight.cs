@@ -1,4 +1,5 @@
-﻿namespace SparkTech.SDK.Targeting
+﻿/*
+namespace SparkTech.SDK.Targeting
 {
     using System;
     using System.Collections.Generic;
@@ -37,3 +38,4 @@
         }
     }
 }
+*/

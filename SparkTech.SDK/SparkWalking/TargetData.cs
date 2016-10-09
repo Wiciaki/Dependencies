@@ -11,11 +11,6 @@
     public class TargetData
     {
         /// <summary>
-        /// The default <see cref="TargetData"/> instance
-        /// </summary>
-        public static readonly TargetData Empty;
-
-        /// <summary>
         /// The <see cref="AttackableUnit"/> instance
         /// </summary>
         public readonly AttackableUnit Target;
@@ -53,11 +48,16 @@
         }
 
         /// <summary>
+        /// The default <see cref="TargetData"/> instance
+        /// </summary>
+        public static readonly TargetData Empty;
+
+        /// <summary>
         /// Initializes static members of the <see cref="TargetData"/> class
         /// </summary>
         static TargetData()
         {
-            Empty = new TargetData(false);
+            Empty = new TargetData((AttackableUnit)null);
         }
     }
 }
