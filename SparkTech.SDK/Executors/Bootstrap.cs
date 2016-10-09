@@ -6,8 +6,7 @@
     using System.Runtime.CompilerServices;
 
     using EloBuddy.SDK.Events;
-
-    using NLog;
+    using EloBuddy.SDK.Utils;
 
     /// <summary>
     /// The component initializer
@@ -18,11 +17,6 @@
         /// The current assembly
         /// </summary>
         internal static readonly Assembly Assembly;
-
-        /// <summary>
-        /// The logger for the current type
-        /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes static members of the <see cref="Bootstrap"/> class
@@ -61,7 +55,7 @@
                         }
                         catch (TypeInitializationException ex)
                         {
-                            Logger.Fatal(ex);
+                            Logger.Error(ex.ToString());
                         }
                     }
                 };

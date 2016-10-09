@@ -5,8 +5,7 @@
     using System.Linq;
 
     using EloBuddy;
-
-    using NLog;
+    using EloBuddy.SDK.Utils;
 
     using SparkTech.SDK.Executors;
 
@@ -16,11 +15,6 @@
     [Trigger]
     public class TickOperation : Executable
     {
-        /// <summary>
-        /// The logger for the current class
-        /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// The list containing the operations
         /// </summary>
@@ -67,7 +61,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error(ex);
+                        Logger.Error(ex.ToString());
                     }
                 };
 
@@ -134,7 +128,7 @@
             }
             catch (Exception ex)
             {
-                this.Log(ex, "Couldn't execute an action in TickOperation!");
+                this.Log(ex);
             }
         }
     }

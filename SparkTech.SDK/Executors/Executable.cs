@@ -1,9 +1,8 @@
 ﻿namespace SparkTech.SDK.Executors
 {
     using System;
-    using System.Security;
 
-    using NLog;
+    using EloBuddy.SDK.Utils;
 
     /// <summary>
     /// Represents a disposable class
@@ -13,22 +12,7 @@
         /// <summary>
         /// Determines whether this instance has already been disposed
         /// </summary>
-        private bool toBeDisposed;
-
-        /// <summary>
-        /// The logger for the current instance
-        /// </summary>
-        private readonly Logger logger;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Executable"/> class
-        /// </summary>
-        protected Executable()
-        {
-            this.toBeDisposed = true;
-
-            this.logger = LogManager.GetLogger(this.GetType().FullName);
-        }
+        private bool toBeDisposed = true;
 
         /// <summary>
         /// Finalizes an instance of the <see cref="Executable"/> class
@@ -68,22 +52,9 @@
         /// Logs the exception
         /// </summary>
         /// <param name="ex">The exception</param>
-        /// <param name="message">The message</param>
-        [SecuritySafeCritical]
-        protected void Log(Exception ex, string message)
+        protected void Log(Exception ex)
         {
-            this.logger.Error(ex, message);
-        }
-
-        /// <summary>
-        /// Logs an exception
-        /// </summary>
-        /// <typeparam name="TException">The exception type</typeparam>
-        /// <param name="ex">The exception object</param>
-        [SecuritySafeCritical]
-        protected void Log<TException>(TException ex) where TException : Exception
-        {
-            this.logger.Error(ex);
+            Logger.Error(ex.ToString());
         }
     }
 }

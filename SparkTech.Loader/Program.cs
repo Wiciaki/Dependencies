@@ -61,7 +61,7 @@
             var librariesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EloBuddy", "Addons", "Libraries");
             Directory.CreateDirectory(librariesPath);
 
-            var libs = new List<string> { "SparkTech.SDK", "NLog", "MoreLinq", "JetBrains.Annotations" };
+            var libs = new List<string> { "SparkTech.SDK", "MoreLinq", "JetBrains.Annotations" };
 
             Resources = libs.ConvertAll(name =>
             {
