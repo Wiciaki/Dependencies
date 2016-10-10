@@ -58,76 +58,92 @@
         /// </summary>
         static Program()
         {
-            var librariesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EloBuddy", "Addons", "Libraries");
+            var librariesPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "EloBuddy",
+                "Addons",
+                "Libraries");
+
             Directory.CreateDirectory(librariesPath);
 
             var libs = new List<string> { "SparkTech.SDK", "MoreLinq", "JetBrains.Annotations" };
 
             Resources = libs.ConvertAll(name =>
-            {
-                name += ".dll";
+                    {
+                        name += ".dll";
 
-                return new ResourceData { CloudPath = BaseWebPath + name, LocalPath = Path.Combine(librariesPath, name) };
-            });
+                        return new ResourceData { CloudPath = BaseWebPath + name, LocalPath = Path.Combine(librariesPath, name) };
+                    });
         }
 
         /// <summary>
         /// The entry point for an application
         /// </summary>
         /// <param name="args">The empty, non-null string array</param>
-        // ReSharper disable once UnusedParameter.Local
         private static void Main(string[] args)
         {
+            if (args == null)
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
+            
             var dir = Directory.GetCurrentDirectory();
 
             var updater = Path.Combine(dir, "SparkTech.Updater.exe");
-            {
-                var info = new FileInfo(updater);
+            Delete(updater);
+            Delete(Path.Combine(dir, "Updater.exe"));
 
-                if (info.Exists)
-                {
-                    info.Delete();
-                }
-            }
-
-            var assemblyName = typeof(Program).Assembly.GetName();
+            var assembly = typeof(Program).Assembly;
+            var assemblyName = assembly.GetName();
+            var name = assemblyName.Name;
 
             using (var client = new WebClient())
             {
-                var web = client.DownloadString(BaseWebPath + assemblyName.Name + ".txt");
+                var web = client.DownloadString(BaseWebPath + name + ".txt");
 
                 if (assemblyName.Version < new Version(web))
                 {
                     File.WriteAllBytes(updater, Properties.Resources.SparkTech_Updater);
                     Process.Start(updater);
-                    Environment.Exit(0);
+                    return;
+                }
+
+                string elobuddy;
+
+                if ((elobuddy = Directory.GetFiles(dir).Select(Path.GetFileName).SingleOrDefault(x => x.Equals("elobuddy.loader.exe", StringComparison.OrdinalIgnoreCase))) == null)
+                {
+                    AllocConsole();
+                    Console.Write("This file must be placed in the same folder as EloBuddy.Loader.exe!\nPlease move this file and try again.\n");
+                    Console.Read();
+                    return;
                 }
 
                 if (!File.Exists(Path.Combine(dir, "noshortcut")))
                 {
                     var shortcut = (IWshShortcut)new WshShell().CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "SparkTech.lnk"));
-                    shortcut.TargetPath = Path.Combine(dir, "SparkTech.Loader.exe");
+                    shortcut.TargetPath = Path.Combine(dir, name + ".exe");
                     shortcut.WorkingDirectory = dir;
                     shortcut.Save();
                 }
 
-                string elobuddy;
-
-                if (!new DirectoryInfo(dir).Name.Equals("elobuddy", StringComparison.OrdinalIgnoreCase) || (elobuddy = Directory.GetFiles(dir).Select(Path.GetFileName).SingleOrDefault(x => x.Equals("elobuddy.loader.exe", StringComparison.OrdinalIgnoreCase))) == null)
-                {
-                    AllocConsole();
-                    Console.WriteLine("This file must be placed in EloBuddy installation folder!\nPlease move this file and try again.");
-                    Console.Read();
-                    return;
-                }
-
                 Process.Start(elobuddy);
+
                 Thread.Sleep(3000);
 
                 foreach (var file in Resources)
                 {
                     client.DownloadFile(file.CloudPath, file.LocalPath);
                 }
+            }
+        }
+
+        private static void Delete(string path)
+        {
+            var file = new FileInfo(path);
+
+            if (file.Exists)
+            {
+                file.Delete();
             }
         }
     }
