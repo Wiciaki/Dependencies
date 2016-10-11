@@ -243,16 +243,11 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/Download/SharpDX.dll
-/Download/SharpDX.Direct3D9.dll
-/Download/SparkTech.Loader.vshost.exe
-/Download/SparkTech.Loader.vshost.exe.manifest
-/Download/NLog.xml
-/Download/NLog.config
-/Download/Newtonsoft.Json.dll
-/Download/MoreLinq.xml
-/Download/JetBrains.Annotations.xml
-/Download/EloBuddy.SDK.dll
-/Download/EloBuddy.Sandbox.dll
-/Download/EloBuddy.dll
-/Download/SparkTech.SDK.dll.config
+
+# Downloadable files
+/Download/
+!/Download/SparkTech.dll
+!/Download/SparkTech.Loader.exe
+!/Download/SparkTech.Loader.txt
+!/Download/JetBrains.Annotations.dll
+!/Download/MoreLinq.dll
