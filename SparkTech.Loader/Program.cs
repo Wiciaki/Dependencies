@@ -86,10 +86,11 @@
             {
                 throw new ArgumentNullException(nameof(args));
             }
-            
+
             var dir = Directory.GetCurrentDirectory();
 
-            var updater = Path.Combine(dir, "SparkTech.Updater.exe");
+            const string UpdaterName = "SparkTech.Updater.exe";
+            var updater = Path.Combine(dir, UpdaterName);
             Delete(updater);
             Delete(Path.Combine(dir, "Updater.exe"));
 
@@ -104,7 +105,7 @@
                 if (assemblyName.Version < new Version(web))
                 {
                     File.WriteAllBytes(updater, Properties.Resources.SparkTech_Updater);
-                    Process.Start(updater);
+                    StartProcess(updater, dir);
                     return;
                 }
 
@@ -112,6 +113,21 @@
 
                 if ((elobuddy = Directory.GetFiles(dir).Select(Path.GetFileName).SingleOrDefault(x => x.Equals("elobuddy.loader.exe", StringComparison.OrdinalIgnoreCase))) == null)
                 {
+                    if (!new DirectoryInfo(dir).Name.Equals("EloBuddy", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "EloBuddy");
+
+                        if (Directory.Exists(defaultPath))
+                        {
+                            updater = Path.Combine(defaultPath, UpdaterName);
+
+                            File.WriteAllBytes(updater, Properties.Resources.SparkTech_Updater);
+                            
+                            StartProcess(updater, defaultPath, assembly.Location);
+                            return;
+                        }
+                    }
+
                     AllocConsole();
                     Console.Write("This file must be placed in the same folder as EloBuddy.Loader.exe!\nPlease move this file and try again.\n");
                     Console.Read();
@@ -120,7 +136,11 @@
 
                 if (!File.Exists(Path.Combine(dir, "noshortcut")))
                 {
-                    var shortcut = (IWshShortcut)new WshShell().CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "SparkTech.lnk"));
+                    var desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    var destination = Path.Combine(desktop, "SparkTech.lnk");
+
+                    var shortcut = (IWshShortcut)new WshShell().CreateShortcut(destination);
+
                     shortcut.TargetPath = Path.Combine(dir, name + ".exe");
                     shortcut.WorkingDirectory = dir;
                     shortcut.Save();
@@ -137,6 +157,10 @@
             }
         }
 
+        /// <summary>
+        /// Deletes a file if it exists
+        /// </summary>
+        /// <param name="path">The file path to be deleted</param>
         private static void Delete(string path)
         {
             var file = new FileInfo(path);
@@ -145,6 +169,24 @@
             {
                 file.Delete();
             }
+        }
+
+        /// <summary>
+        /// Starts a new process
+        /// </summary>
+        /// <param name="path">The executable path</param>
+        /// <param name="dir">The working directory</param>
+        /// <param name="args">The arguments</param>
+        private static void StartProcess(string path, string dir, string args = null)
+        {
+            var processStart = new ProcessStartInfo { FileName = path, WorkingDirectory = dir, UseShellExecute = false };
+
+            if (!string.IsNullOrWhiteSpace(args))
+            {
+                processStart.Arguments = args;
+            }
+
+            Process.Start(processStart);
         }
     }
 }

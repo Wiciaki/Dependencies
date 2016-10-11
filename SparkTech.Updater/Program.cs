@@ -1,5 +1,6 @@
 ﻿namespace SparkTech.Updater
 {
+    using System;
     using System.Diagnostics;
     using System.IO;
     using System.Net;
@@ -8,6 +9,16 @@
     {
         private static void Main(string[] args)
         {
+            if (args == null)
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
+
+            if (args.Length > 0)
+            {
+                File.Delete(args[0]);
+            }
+
             const string LoaderName = "SparkTech.Loader.exe";
 
             var file = Path.Combine(Directory.GetCurrentDirectory(), LoaderName);
