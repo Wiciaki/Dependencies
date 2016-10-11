@@ -105,7 +105,7 @@
                 if (assemblyName.Version < new Version(web))
                 {
                     File.WriteAllBytes(updater, Properties.Resources.SparkTech_Updater);
-                    StartProcess(updater, dir);
+                    RunElevated(updater, dir);
                     return;
                 }
 
@@ -123,7 +123,7 @@
 
                             File.WriteAllBytes(updater, Properties.Resources.SparkTech_Updater);
                             
-                            StartProcess(updater, defaultPath, assembly.Location);
+                            RunElevated(updater, defaultPath, assembly.Location);
                             return;
                         }
                     }
@@ -143,12 +143,13 @@
 
                     shortcut.TargetPath = Path.Combine(dir, name + ".exe");
                     shortcut.WorkingDirectory = dir;
+                    shortcut.Description = "Launch EloBuddy with the power of SparkTech.SDK!";
                     shortcut.Save();
                 }
 
                 Process.Start(elobuddy);
 
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
 
                 foreach (var file in Resources)
                 {
@@ -177,16 +178,16 @@
         /// <param name="path">The executable path</param>
         /// <param name="dir">The working directory</param>
         /// <param name="args">The arguments</param>
-        private static void StartProcess(string path, string dir, string args = null)
+        private static void RunElevated(string path, string dir, string args = null)
         {
-            var processStart = new ProcessStartInfo { FileName = path, WorkingDirectory = dir, UseShellExecute = false };
+            var startInfo = new ProcessStartInfo { FileName = path, WorkingDirectory = dir, UseShellExecute = false };
 
-            if (!string.IsNullOrWhiteSpace(args))
+            if (args != null)
             {
-                processStart.Arguments = args;
+                startInfo.Arguments = args;
             }
 
-            Process.Start(processStart);
+            Process.Start(startInfo);
         }
     }
 }
