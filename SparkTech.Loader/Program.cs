@@ -91,8 +91,14 @@
 
             const string UpdaterName = "SparkTech.Updater.exe";
             var updater = Path.Combine(dir, UpdaterName);
-            Delete(updater);
-            Delete(Path.Combine(dir, "Updater.exe"));
+            {
+                var file = new FileInfo(updater);
+
+                if (file.Exists)
+                {
+                    file.Delete();
+                }
+            }
 
             var assembly = typeof(Program).Assembly;
             var assemblyName = assembly.GetName();
@@ -105,13 +111,13 @@
                 if (assemblyName.Version < new Version(web))
                 {
                     File.WriteAllBytes(updater, Properties.Resources.SparkTech_Updater);
-                    RunElevated(updater, dir);
+                    StartInternal(updater, dir);
                     return;
                 }
 
-                string elobuddy;
+                var elobuddy = Array.Find(Directory.GetFiles(dir), x => Path.GetFileName(x) == "EloBuddy.Loader.exe");
 
-                if ((elobuddy = Directory.GetFiles(dir).Select(Path.GetFileName).SingleOrDefault(x => x.Equals("elobuddy.loader.exe", StringComparison.OrdinalIgnoreCase))) == null)
+                if (elobuddy == null)
                 {
                     if (!new DirectoryInfo(dir).Name.Equals("EloBuddy", StringComparison.OrdinalIgnoreCase))
                     {
@@ -123,7 +129,7 @@
 
                             File.WriteAllBytes(updater, Properties.Resources.SparkTech_Updater);
                             
-                            RunElevated(updater, defaultPath, assembly.Location);
+                            StartInternal(updater, defaultPath, assembly.Location);
                             return;
                         }
                     }
@@ -159,32 +165,18 @@
         }
 
         /// <summary>
-        /// Deletes a file if it exists
-        /// </summary>
-        /// <param name="path">The file path to be deleted</param>
-        private static void Delete(string path)
-        {
-            var file = new FileInfo(path);
-
-            if (file.Exists)
-            {
-                file.Delete();
-            }
-        }
-
-        /// <summary>
         /// Starts a new process
         /// </summary>
         /// <param name="path">The executable path</param>
         /// <param name="dir">The working directory</param>
-        /// <param name="args">The arguments</param>
-        private static void RunElevated(string path, string dir, string args = null)
+        /// <param name="arguments">The arguments</param>
+        private static void StartInternal(string path, string dir, string arguments = null)
         {
             var startInfo = new ProcessStartInfo { FileName = path, WorkingDirectory = dir, UseShellExecute = false };
 
-            if (args != null)
+            if (arguments != null)
             {
-                startInfo.Arguments = args;
+                startInfo.Arguments = arguments;
             }
 
             Process.Start(startInfo);
