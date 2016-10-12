@@ -58,6 +58,7 @@
         static ObjectText()
         {
             Menu = Variables.SDKMenu.AddSubMenu("Text below units", "st_core_drawings_text");
+            Menu.Add("text_enable", new CheckBox("Enable"));
 
             Entries = new ObservableCollection<ObjectTextEntry>();
 

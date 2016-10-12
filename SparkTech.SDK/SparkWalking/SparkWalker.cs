@@ -1,4 +1,5 @@
-﻿namespace SparkTech.SDK.SparkWalking
+﻿/*
+namespace SparkTech.SDK.SparkWalking
 {
     using System;
     using System.Collections.Generic;
@@ -1602,4 +1603,4 @@
 
         #endregion
     }
-}
+}*/
