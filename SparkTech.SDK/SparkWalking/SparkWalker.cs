@@ -1,5 +1,4 @@
-﻿/*
-namespace SparkTech.SDK.SparkWalking
+﻿namespace SparkTech.SDK.SparkWalking
 {
     using System;
     using System.Collections.Generic;
@@ -23,7 +22,7 @@ namespace SparkTech.SDK.SparkWalking
     using Prediction = EloBuddy.SDK.Prediction.Position;
     using HealthPrediction = EloBuddy.SDK.Prediction.Health;
 
-    using Keys = System.Windows.Forms.Keys;
+    using Key = System.Windows.Forms.Keys;
 
     /// <summary>
     /// An alternative to the <see cref="EloBuddy.SDK.Orbwalker"/> class.
@@ -36,7 +35,7 @@ namespace SparkTech.SDK.SparkWalking
         /// <summary>
         /// The orbwalker's main menu instance
         /// </summary>
-        private static readonly Menu Menu = MainMenu.AddMenu("SparkWalker", "st_orb");
+        private static readonly Menu Menu = MainMenu.AddMenu("Orbwalker", "st_orb");
 
         /// <summary>
         /// The orbwalker's main menu instance
@@ -188,7 +187,7 @@ namespace SparkTech.SDK.SparkWalking
             /// <summary>
             /// The key for mode to be activated
             /// </summary>
-            internal readonly Keys Key;
+            internal readonly Key Key;
 
             /// <summary>
             /// An array of <see cref="UnitType"/> the mode should be enabled by default for
@@ -200,7 +199,7 @@ namespace SparkTech.SDK.SparkWalking
             /// </summary>
             /// <param name="key">The key for mode to be activated</param>
             /// <param name="unitsEnabled">An array of <see cref="UnitType"/> the mode should be enabled by default for</param>
-            internal ModeConfig(Keys key, params UnitType[] unitsEnabled)
+            internal ModeConfig(Key key, params UnitType[] unitsEnabled)
             {
                 this.Key = key;
 
@@ -218,13 +217,13 @@ namespace SparkTech.SDK.SparkWalking
                                                                                          {
                                                                                              Mode.Combo,
                                                                                              new ModeConfig(
-                                                                                             Keys.Space,
+                                                                                             Key.Space,
                                                                                              UnitType.Champion)
                                                                                          },
                                                                                          {
                                                                                              Mode.LaneClear,
                                                                                              new ModeConfig(
-                                                                                             Keys.V,
+                                                                                             Key.V,
                                                                                              UnitType.LaneMinion,
                                                                                              UnitType.Structure,
                                                                                              UnitType.Object,
@@ -235,25 +234,25 @@ namespace SparkTech.SDK.SparkWalking
                                                                                          {
                                                                                              Mode.Harass,
                                                                                              new ModeConfig(
-                                                                                             Keys.C,
+                                                                                             Key.C,
                                                                                              UnitType.LaneMinion,
                                                                                              UnitType.Champion)
                                                                                          },
                                                                                          {
                                                                                              Mode.Freeze,
                                                                                              new ModeConfig(
-                                                                                             Keys.A,
+                                                                                             Key.A,
                                                                                              UnitType.LaneMinion)
                                                                                          },
                                                                                          {
                                                                                              Mode.LastHit,
                                                                                              new ModeConfig(
-                                                                                             Keys.X,
+                                                                                             Key.X,
                                                                                              UnitType.LaneMinion)
                                                                                          },
                                                                                          {
                                                                                              Mode.Flee,
-                                                                                             new ModeConfig(Keys.Z)
+                                                                                             new ModeConfig(Key.Z)
                                                                                          }
                                                                                      };
 
@@ -770,7 +769,7 @@ namespace SparkTech.SDK.SparkWalking
                     }
                 }
 
-                modesMenu.Add(new MenuKeyBind("st_orb_key_movblock", "Movement block", Keys.P, KeyBindType.Press));
+                modesMenu.Add(new MenuKeyBind("st_orb_key_movblock", "Movement block", Key.P, KeyBindType.Press));
             }
 
             var drawMenu = Menu.Add(new SDKMenu("st_orb_draw", "Drawings"));
@@ -1603,4 +1602,4 @@ namespace SparkTech.SDK.SparkWalking
 
         #endregion
     }
-}*/
+}

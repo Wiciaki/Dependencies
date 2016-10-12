@@ -5,7 +5,6 @@
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Linq;
     using System.Net;
     using System.Runtime.InteropServices;
     using System.Threading;
@@ -49,6 +48,11 @@
         private static readonly List<ResourceData> Resources;
 
         /// <summary>
+        /// The files from old releases to be removed
+        /// </summary>
+        private static readonly List<string> Deletables;
+
+        /// <summary>
         /// The beginning for download links
         /// </summary>
         private const string BaseWebPath = "https://raw.githubusercontent.com/Wiciaki/Dependencies/master/Download/";
@@ -74,6 +78,8 @@
 
                         return new ResourceData { CloudPath = BaseWebPath + name, LocalPath = Path.Combine(librariesPath, name) };
                     });
+
+            Deletables = new List<string> { Path.Combine(librariesPath, "NLog.dll") };
         }
 
         /// <summary>
@@ -91,8 +97,12 @@
 
             const string UpdaterName = "SparkTech.Updater.exe";
             var updater = Path.Combine(dir, UpdaterName);
+            Deletables.Add(updater);
+            Deletables.Add(Path.Combine(dir, "Updater.exe"));
+
+            foreach (var path in Deletables)
             {
-                var file = new FileInfo(updater);
+                var file = new FileInfo(path);
 
                 if (file.Exists)
                 {
