@@ -5,7 +5,6 @@
     using System.Linq;
 
     using EloBuddy;
-    using EloBuddy.SDK.Utils;
 
     using SparkTech.SDK.Executors;
 
@@ -61,7 +60,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error(ex.ToString());
+                        Log(ex);
                     }
                 };
 
@@ -71,7 +70,7 @@
         /// <summary>
         /// The action to be executed
         /// </summary>
-        private readonly Action action;
+        private readonly Action Action;
 
         /// <summary>
         /// Determines whether the <see cref="TickOperation"/> will be executing
@@ -94,7 +93,7 @@
         /// <param name="action"></param>
         public TickOperation(Action action)
         {
-            this.action = action;
+            this.Action = action;
 
             this.lastTick = currentTime;
 
@@ -124,11 +123,11 @@
         {
             try
             {
-                this.action();
+                this.Action();
             }
             catch (Exception ex)
             {
-                this.Log(ex);
+                Log(ex);
             }
         }
     }

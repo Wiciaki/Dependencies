@@ -42,6 +42,11 @@
         /// <returns></returns>
         public static bool AssemblyInfoValidation(string link)
         {
+            if (string.IsNullOrWhiteSpace(link))
+            {
+                return false;
+            }
+
             link = link.ToLower();
 
             return link.Contains("raw.githubusercontent.com") && link.Contains("assemblyinfo.cs");

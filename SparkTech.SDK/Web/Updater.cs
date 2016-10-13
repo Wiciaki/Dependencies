@@ -58,7 +58,7 @@
         {
             if (!(this.IsLinkValid = Utility.IsLinkValid(link, out this.Link)))
             {
-                this.Log(new ArgumentException("[ST] Updater - The provided link was invalid!"));
+                Log(new ArgumentException(@"[ST] Updater - The provided link was invalid!", nameof(link)));
             }
         }
     }

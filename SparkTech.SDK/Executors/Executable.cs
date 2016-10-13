@@ -52,7 +52,7 @@
         /// Logs the exception
         /// </summary>
         /// <param name="ex">The exception</param>
-        protected void Log(Exception ex)
+        protected static void Log(Exception ex)
         {
             Logger.Error(ex.ToString());
         }

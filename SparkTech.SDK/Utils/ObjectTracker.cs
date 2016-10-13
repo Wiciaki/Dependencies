@@ -16,19 +16,19 @@
 
         private bool process;
 
-        private readonly string itemName, spellName;
+        private readonly string ItemName, SpellName;
 
-        private readonly StringComparison comparison;
+        private readonly StringComparison Comparison;
 
-        private readonly int trackedId;
+        private readonly int TrackedId;
         
         public ObjectTracker(string itemName, string spellName, int? sourceNetworkId = null, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             this.Items = new List<T>();
-            this.itemName = itemName;
-            this.spellName = spellName;
-            this.comparison = comparison;
-            this.trackedId = sourceNetworkId ?? ObjectCache.Player.NetworkId;
+            this.ItemName = itemName;
+            this.SpellName = spellName;
+            this.Comparison = comparison;
+            this.TrackedId = sourceNetworkId ?? ObjectCache.Player.NetworkId;
 
             GameObject.OnCreate += this.OnCreate;
             Obj_AI_Base.OnPlayAnimation += this.OnPlayAnimation;
@@ -37,7 +37,7 @@
 
         private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.NetworkId == this.trackedId && this.spellName.Equals(args.SData.Name, this.comparison))
+            if (sender.NetworkId == this.TrackedId && this.SpellName.Equals(args.SData.Name, this.Comparison))
             {
                 this.process = true;
             }
@@ -45,7 +45,7 @@
 
         private void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
-            if (!this.itemName.Equals(sender.Name, this.comparison) || args.Animation != "Death")
+            if (!this.ItemName.Equals(sender.Name, this.Comparison) || args.Animation != "Death")
             {
                 return;
             }
@@ -62,7 +62,7 @@
 
         private void OnCreate(GameObject sender, EventArgs args)
         {
-            if (!this.process || !sender.Name.Equals(this.itemName, this.comparison))
+            if (!this.process || !sender.Name.Equals(this.ItemName, this.Comparison))
             {
                 return;
             }

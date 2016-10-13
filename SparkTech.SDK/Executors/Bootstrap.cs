@@ -23,7 +23,7 @@
         /// </summary>
         static Bootstrap()
         {
-            HandleTrigger(Assembly = Assembly.GetAssembly(typeof(Bootstrap)));
+            HandleTrigger(Assembly = typeof(Bootstrap).Assembly);
         }
 
         /// <summary>
@@ -31,12 +31,11 @@
         /// </summary>
         /// <param name="args">The empty, non-null string array</param>
         /// <param name="bootstrapLinkType">The link type</param>
-        [MethodImpl(MethodImplOptions.NoInlining)]
         public static void Handle(this string[] args, Type bootstrapLinkType)
         {
             Array.ForEach(args, Console.WriteLine);
 
-            HandleTrigger(Assembly.GetAssembly(bootstrapLinkType));
+            HandleTrigger(bootstrapLinkType.Assembly);
         }
 
         /// <summary>

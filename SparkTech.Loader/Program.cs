@@ -93,22 +93,13 @@
                 throw new ArgumentNullException(nameof(args));
             }
 
-            var dir = Directory.GetCurrentDirectory();
-
             const string UpdaterName = "SparkTech.Updater.exe";
+
+            var dir = Directory.GetCurrentDirectory();
             var updater = Path.Combine(dir, UpdaterName);
+
             Deletables.Add(updater);
             Deletables.Add(Path.Combine(dir, "Updater.exe"));
-
-            foreach (var path in Deletables)
-            {
-                var file = new FileInfo(path);
-
-                if (file.Exists)
-                {
-                    file.Delete();
-                }
-            }
 
             var assembly = typeof(Program).Assembly;
             var assemblyName = assembly.GetName();
@@ -125,11 +116,11 @@
                     return;
                 }
 
-                var elobuddy = Array.Find(Directory.GetFiles(dir), x => Path.GetFileName(x) == "EloBuddy.Loader.exe");
+                var elobuddy = Array.Find(Directory.GetFiles(dir), x => string.Equals(Path.GetFileName(x), "EloBuddy.Loader.exe", StringComparison.OrdinalIgnoreCase));
 
                 if (elobuddy == null)
                 {
-                    if (!new DirectoryInfo(dir).Name.Equals("EloBuddy", StringComparison.OrdinalIgnoreCase))
+                    if (new DirectoryInfo(dir).Name != "EloBuddy")
                     {
                         var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "EloBuddy");
 
@@ -163,14 +154,13 @@
                     shortcut.Save();
                 }
 
+                Deletables.FindAll(File.Exists).ForEach(File.Delete);
+
                 Process.Start(elobuddy);
 
                 Thread.Sleep(1000);
 
-                foreach (var file in Resources)
-                {
-                    client.DownloadFile(file.CloudPath, file.LocalPath);
-                }
+                Resources.ForEach(file => client.DownloadFile(file.CloudPath, file.LocalPath));
             }
         }
 

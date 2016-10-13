@@ -48,7 +48,7 @@
         /// <summary>
         /// Gets the current status message
         /// </summary>
-        public string StatusMessage => this.Success ? this.IsUpdated ? $"Congratulations! {this.assemblyName} is updated!" : $"A new update for {this.assemblyName} is available" : $"Can't check update for {this.assemblyName}";
+        public string StatusMessage => this.Success ? this.IsUpdated ? $"Congratulations! {this.AssemblyName} is updated!" : $"A new update for {this.AssemblyName} is available" : $"Can't check update for {this.AssemblyName}";
 
         /// <summary>
         /// The message <see cref="Language"/>
@@ -58,7 +58,7 @@
         /// <summary>
         /// The locally saved assembly name
         /// </summary>
-        private readonly string assemblyName;
+        private readonly string AssemblyName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckPerformedEventArgs"/> class with a cloud <see cref="Version"/>, a local <see cref="Version"/> and an assembly name
@@ -72,7 +72,7 @@
 
             this.GitVersion = gitVersion;
 
-            this.assemblyName = assemblyName;
+            this.AssemblyName = assemblyName;
         }
     }
 }
