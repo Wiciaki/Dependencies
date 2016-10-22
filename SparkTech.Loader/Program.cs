@@ -93,6 +93,10 @@
                 throw new ArgumentNullException(nameof(args));
             }
 
+            AllocConsole();
+            Console.Write("This project has been patched and no longer works.\nFuther development would chunk too much time as well as solutions would be ugly to use.\nExpect different project types from me in the future.\nHitting any button now will execute the obsolete code.");
+            Console.Read();
+
             const string UpdaterName = "SparkTech.Updater.exe";
 
             var dir = Directory.GetCurrentDirectory();

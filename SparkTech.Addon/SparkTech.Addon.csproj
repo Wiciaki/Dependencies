@@ -69,25 +69,25 @@
   <PropertyGroup />
   <ItemGroup>
     <Reference Include="EloBuddy">
-      <HintPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
+      <HintPath>C:\Users\akloj\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
-      <HintPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
+      <HintPath>C:\Users\akloj\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations">
-      <HintPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\JetBrains.Annotations.dll</HintPath>
+      <HintPath>C:\Users\akloj\AppData\Roaming\EloBuddy\Addons\Libraries\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
-      <HintPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\MoreLinq.dll</HintPath>
+      <HintPath>C:\Users\akloj\AppData\Roaming\EloBuddy\Addons\Libraries\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.dll</HintPath>
+      <HintPath>C:\Users\akloj\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>C:\Users\akloj\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="SparkTech.SDK">
-      <HintPath>C:\Users\wicia\AppData\Roaming\EloBuddy\Addons\Libraries\SparkTech.SDK.dll</HintPath>
+      <HintPath>C:\Users\akloj\AppData\Roaming\EloBuddy\Addons\Libraries\SparkTech.SDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />

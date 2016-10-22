@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Download\SparkTech.Loader.txt = Download\SparkTech.Loader.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkTech.SDK", "SparkTech.SDK\SparkTech.SDK.csproj", "{0C2738A8-8265-4C5B-BBE9-554A7A42F4D0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkTech.Updater", "SparkTech.Updater\SparkTech.Updater.csproj", "{81083461-52F9-4BD3-BBF4-3E09FDFF18D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkTech.Addon", "SparkTech.Addon\SparkTech.Addon.csproj", "{89EE39CA-2498-4F38-B2E8-A5FA0D70108D}"
@@ -32,14 +30,6 @@ Global
 		{D2BE0DA3-9047-44DF-A838-C8420DD7475B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D2BE0DA3-9047-44DF-A838-C8420DD7475B}.Release|x86.ActiveCfg = Release|Any CPU
 		{D2BE0DA3-9047-44DF-A838-C8420DD7475B}.Release|x86.Build.0 = Release|Any CPU
-		{0C2738A8-8265-4C5B-BBE9-554A7A42F4D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C2738A8-8265-4C5B-BBE9-554A7A42F4D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C2738A8-8265-4C5B-BBE9-554A7A42F4D0}.Debug|x86.ActiveCfg = Debug|x86
-		{0C2738A8-8265-4C5B-BBE9-554A7A42F4D0}.Debug|x86.Build.0 = Debug|x86
-		{0C2738A8-8265-4C5B-BBE9-554A7A42F4D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C2738A8-8265-4C5B-BBE9-554A7A42F4D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0C2738A8-8265-4C5B-BBE9-554A7A42F4D0}.Release|x86.ActiveCfg = Release|x86
-		{0C2738A8-8265-4C5B-BBE9-554A7A42F4D0}.Release|x86.Build.0 = Release|x86
 		{81083461-52F9-4BD3-BBF4-3E09FDFF18D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81083461-52F9-4BD3-BBF4-3E09FDFF18D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81083461-52F9-4BD3-BBF4-3E09FDFF18D4}.Debug|x86.ActiveCfg = Debug|Any CPU
